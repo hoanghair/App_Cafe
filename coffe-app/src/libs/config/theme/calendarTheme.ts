@@ -1,0 +1,27 @@
+import { Theme } from 'react-native-calendars/src/types'
+
+export const calendarTheme: Theme = {
+  backgroundColor: '#ffffff',
+  calendarBackground: '#ffffff',
+  textSectionTitleColor: '#000',
+  textSectionTitleDisabledColor: '#d9e1e8',
+  selectedDayBackgroundColor: '#00adf5',
+  selectedDayTextColor: '#ffffff',
+  todayTextColor: '#00adf5',
+  dayTextColor: '#000',
+  textDisabledColor: '#d9e1e8',
+  dotColor: '#00adf5',
+  selectedDotColor: '#ffffff',
+  arrowColor: '#000',
+  disabledArrowColor: '#d9e1e8',
+  monthTextColor: '#000',
+  indicatorColor: '#000',
+  textDayFontFamily: 'NotoSansJP-Bold',
+  textMonthFontFamily: 'NotoSansJP-Bold',
+  textDayHeaderFontFamily: 'NotoSansJP-Bold',
+  textMonthFontWeight: 'bold',
+  textDayFontWeight: 'bold',
+  textDayFontSize: 14,
+  textMonthFontSize: 16,
+  textDayHeaderFontSize: 14,
+}
