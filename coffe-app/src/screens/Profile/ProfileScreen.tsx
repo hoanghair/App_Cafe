@@ -26,6 +26,7 @@ const ProfileScreen = () => {
 
   const dispatch = useDispatch()
 
+  // đăng xuất thì xóa người dùng khỏi AsyncStorage
   const handleLogout = async () => {
     await AsyncStorage.removeItem('persist:root:auth')
     await AsyncStorage.removeItem('user')

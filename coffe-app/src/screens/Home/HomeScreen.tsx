@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   Dimensions,
   Image,
@@ -16,10 +16,12 @@ import { useNavigation } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import Swiper from 'react-native-swiper'
 
+// định dạng chuỗi thành dạng có .
 export const formatMoneyVND = (money: number) => {
   return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + 'đ'
 }
 
+// Component Item
 function Item({
   name,
   image,
@@ -39,8 +41,7 @@ function Item({
   updatedAt: string
   __v: number
 }) {
-  const navigation = useNavigation<NavigationProp>()
-  console.log('image', image)
+  const navigation = useNavigation<NavigationProp>();
   return (
     <View>
       <TouchableOpacity
@@ -71,7 +72,9 @@ function Item({
   )
 }
 
+// Component HomeScreen
 export function HomeScreen() {
+  // render sản phẩm
   const renderItem = ({
     item,
   }: {
@@ -90,6 +93,7 @@ export function HomeScreen() {
     }
   }) => <Item {...item} />
 
+  // call api 
   const { data } = useQuery({
     queryFn: getProduct,
     queryKey: ['product'],
@@ -137,7 +141,7 @@ export function HomeScreen() {
               flexDirection: 'row',
               justifyContent: 'space-between',
               width: '100%',
-              backgroundColor: '#fff',
+              // backgroundColor: '#fff',
               padding: 20,
               alignItems: 'center',
               borderRadius: 10,
@@ -153,23 +157,23 @@ export function HomeScreen() {
             }}
           >
             <View style={styles.itemSales}>
-              <MaterialCommunityIcons name="ticket-percent" size={50} color="#A82F2E" />
-              <Text style={{ fontWeight: 'bold' }}>Ưu đãi</Text>
+              <MaterialCommunityIcons name="ticket-percent" size={30} color="#A82F2E" />
+              <Text style={{ fontWeight: 'bold', marginTop: 5 }}>Ưu đãi</Text>
             </View>
             <View style={styles.itemSales}>
-              <FontAwesome5 name="crown" size={50} color="#A82F2E" />
-              <Text style={{ fontWeight: 'bold' }}>Thử thách</Text>
+              <FontAwesome5 name="crown" size={30} color="#A82F2E" />
+              <Text style={{ fontWeight: 'bold', marginTop: 5 }}>Thử thách</Text>
             </View>
             <View style={styles.itemSales}>
-              <Entypo name="heart" size={50} color="#A82F2E" />
-              <Text style={{ fontWeight: 'bold' }}>Yêu thích</Text>
+              <Entypo name="heart" size={30} color="#A82F2E" />
+              <Text style={{ fontWeight: 'bold', marginTop: 5 }}>Yêu thích</Text>
             </View>
           </View>
         </View>
         <View>
           <Text style={styles.contentListProduct}>Sản Phẩm Nổi Bật</Text>
           <ScrollView>
-            <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
+            <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
               {data && data.data.map((item, index) => <Item key={index} {...item} />)}
             </View>
           </ScrollView>
@@ -380,5 +384,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#fff',
+    width: 90,
+    height: 90,
+    borderRadius: 8,
   },
 })

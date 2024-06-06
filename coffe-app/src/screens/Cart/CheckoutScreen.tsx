@@ -36,6 +36,7 @@ export function CheckoutScreen() {
     isEqual,
   )
 
+  // quản lý form
   const {
     formState: { errors },
     control,
@@ -49,6 +50,7 @@ export function CheckoutScreen() {
     resolver: zodResolver(OrderInputSchema),
   })
 
+  // lấy dữ liệu từ API.
   const { data, refetch } = useQuery({
     queryFn: async () => {
       const res = await ApiClient.get<Daum>('/cart/my-self')
@@ -60,6 +62,7 @@ export function CheckoutScreen() {
 
   const queryClient = new QueryClient()
 
+  // gửi request đến API và xử lý kết quả.
   const { mutate: createOrderProduct, isLoading } = useMutation(orderProduct, {
     onSuccess: () => {
       Alert.alert('Đặt hàng thành công')
@@ -92,6 +95,7 @@ export function CheckoutScreen() {
       return
     }
 
+    // Tạo đơn hàng từ dữ liệu giỏ hàng
     const orderProduct = data?.data.items.map((item) => ({
       productId: item.product._id,
       quantity: item.quantity,
@@ -101,7 +105,7 @@ export function CheckoutScreen() {
       return
     }
 
-
+    // Gửi request tạo đơn hàng
     createOrderProduct({
       products: orderProduct,
       shippingAddress: dataShip.shippingAddress,

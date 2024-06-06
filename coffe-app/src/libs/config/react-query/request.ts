@@ -8,13 +8,13 @@ import { useDispatch } from 'react-redux'
 import { getEnvVars } from '../../../../environment'
 
 const env = getEnvVars()
-const baseURL = env?.REACT_APP_ENV_ENDPOINT || 'https://cafe-api-gwhs.onrender.com'
-// Create an authenticated Axios instance
+const baseURL = env.REACT_APP_ENV_ENDPOINT
+// Tạo một phiên bản Axios được xác thực
 export const ApiClient = Axios.create({
   baseURL,
 })
 
-// Request interceptor for adding the token to authenticated requests
+// Trình chặn yêu cầu để thêm mã thông báo vào các yêu cầu được xác thực
 async function authRequestInterceptor(config: InternalAxiosRequestConfig) {
   const token = await getAccessToken()
   if (token) {
@@ -26,12 +26,12 @@ async function authRequestInterceptor(config: InternalAxiosRequestConfig) {
 
 ApiClient.interceptors.request.use(authRequestInterceptor)
 
-// Create an unauthenticated Axios instance
+// Tạo một phiên bản Axios chưa được xác thực
 export const ApiClientUnAuth = Axios.create({
   baseURL,
 })
 
-// AxiosInterceptor component for handling responses and errors
+// Thành phần AxiosInterceptor để xử lý phản hồi và lỗi
 export const AxiosInterceptor = ({ children }: any) => {
   const dispatch = useDispatch<Dispatch>()
 

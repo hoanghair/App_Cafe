@@ -9,6 +9,7 @@ interface CartProps {
   price: number
 }
 
+// khởi tạo giỏ hàng rỗng
 const state: CartProps[] = []
 
 const reducers = {

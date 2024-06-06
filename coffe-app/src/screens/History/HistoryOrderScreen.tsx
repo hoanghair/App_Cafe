@@ -85,7 +85,7 @@ const HistoryOrderScreen = () => {
               </Text>
             </View>
             <View>
-              <Text style={styles.title}>22/111/2021</Text>
+              <Text style={styles.title}>22/111/2024</Text>
             </View>
             <View>
               <Image

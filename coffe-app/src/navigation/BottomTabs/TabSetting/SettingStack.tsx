@@ -1,7 +1,7 @@
 import { SCREENS_KEY } from '@/navigation/preset'
 import { ProfileScreen } from '@/screens/Profile'
 import { createStackNavigator } from '@react-navigation/stack'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SettingStackParams } from './SettingStackParams'
 
 const SettingScreens = [
@@ -20,6 +20,10 @@ const SettingScreens = [
 const HomeStack = createStackNavigator<SettingStackParams>()
 
 export function TabProfile() {
+
+  useEffect(() => {
+    console.log('setting')
+  }, [])
   return (
     <HomeStack.Navigator>
       {SettingScreens.map((child) => (

@@ -19,13 +19,16 @@ export function DetailProductScreen() {
       setCount((prevCount) => prevCount - 1)
     }
   }
+  // Lấy route từ navigation để lấy tham số 'id' của sản phẩm
   const route = useRoute<RouteProductStackType<'PRODUCT_DETAIL'>>()
   const navigation = useNavigation<NavigationProp>()
 
+  // Sử dụng useQuery để lấy thông tin chi tiết sản phẩm từ API
   const { data: detailProduct, isLoading } = useQuery(['detail', route.params.id], () =>
     getDetailProduct(route.params.id),
   )
 
+  // Sử dụng useMutation để thêm sản phẩm vào giỏ hàng
   const { mutate } = useMutation({
     mutationFn: async () => {
       const res = await ApiClient.post('/cart/create', {
@@ -75,7 +78,9 @@ export function DetailProductScreen() {
           <Text style={{ fontSize: 14 }}>Số lượng: {detailProduct?.quantity}</Text>
         </View>
         <View style={styles.in4}>
-          <Text style={{ fontSize: 13, lineHeight: 19, color: 'grey' }}>{detailProduct?.description}</Text>
+          <Text style={{ fontSize: 13, lineHeight: 19, color: 'grey' }}>
+            {detailProduct?.description}
+          </Text>
         </View>
       </View>
       <View style={{ marginTop: 20, alignItems: 'center', marginBottom: 10 }}>

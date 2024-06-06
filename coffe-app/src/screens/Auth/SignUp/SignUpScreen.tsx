@@ -17,12 +17,14 @@ const SignUpScreen = () => {
   const { colors } = useAppTheme()
   const navigation = useNavigation<NavigationProp>()
 
+  // dữ liệu từ form 
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<SignUpType>({
     mode: 'onChange',
+    // validators form
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
       email: '',
@@ -30,6 +32,7 @@ const SignUpScreen = () => {
     },
   })
 
+  // gửi request đến API và xử lý kết quả.
   const { isLoading, mutate } = useMutation(signUp, {
     onError: (error) => {
       Alert.alert('Đăng ký thất bại')
@@ -42,6 +45,7 @@ const SignUpScreen = () => {
     },
   })
 
+  //gửi request đăng ký tài khoản với dữ liệu từ form.
   const onSubmit = (data: SignUpType) => {
     mutate({
       email: data.email,

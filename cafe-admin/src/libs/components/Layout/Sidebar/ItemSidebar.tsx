@@ -37,9 +37,9 @@ const ListItemButton: React.FC<ListItemButtonType> = ({ menu }) => {
       onClick={handleDirection}
       disabled={menu.disable}
     >
-      <ListItemIcon>
+      {/* <ListItemIcon>
         <menu.icon />
-      </ListItemIcon>
+      </ListItemIcon> */}
       <ListItemText primary={menu.title} />
     </StyleListItemButton>
   );

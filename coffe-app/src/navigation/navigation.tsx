@@ -17,7 +17,9 @@ const Navigation = () => {
       user: auth.user,
     }),
     isEqual,
-  )
+  );
+
+  console.log({ user })
 
   if (!user) {
     return (

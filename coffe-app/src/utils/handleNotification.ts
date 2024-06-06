@@ -2,9 +2,11 @@ import * as Device from 'expo-device'
 import * as Notifications from 'expo-notifications'
 import { Alert } from 'react-native'
 
+// đăng ký thông báo trên app
 export async function registerForPushNotificationsAsync() {
   let token = ''
 
+  // kt xem có chạy trên đt ko
   if (Device.isDevice) {
     const { status: existingStatus } = await Notifications.getPermissionsAsync()
     let finalStatus = existingStatus
@@ -23,6 +25,7 @@ export async function registerForPushNotificationsAsync() {
   return token
 }
 
+// gửi thông báo đẩy đến expo
 export async function sendPushNotification(expoPushToken: string) {
   const message = {
     to: expoPushToken,

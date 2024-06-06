@@ -31,6 +31,7 @@ export function SignInScreen() {
     formState: { errors },
   } = useForm<SignInType>({
     mode: 'onChange',
+    // validation form
     resolver: zodResolver(SignInSchema),
     defaultValues: {
       email: '',
@@ -41,12 +42,15 @@ export function SignInScreen() {
   const theme = useAppTheme()
   const dispatch = useDispatch()
 
+  // gửi yêu cầu đăng nhập và xử lý kết quả.
   const { isLoading, mutate } = useMutation(signIn, {
     onSuccess: (response, { email }) => {
       const { user, id } = response
       const { role, token, username } = user
+      // để lưu trữ token truy cập và thông tin người dùng đã xác thực
       setAccessToken(token)
       setAuthUser({ role, username, email, id })
+      //Gửi action đến Redux store để thay đổi trạng thái
       dispatch.auth.setUser({
         email,
         id,
@@ -68,6 +72,7 @@ export function SignInScreen() {
 
   return (
     // <View style={styles.container}>
+    // để cuộn nội dung của màn hình và tự động điều chỉnh giao diện khi bàn phím xuất hiện trên màn hình.
     <ScrollView style={styles.container}>
       <View
         style={{
@@ -88,7 +93,7 @@ export function SignInScreen() {
             color: '#B3282D',
           }}
         >
-          Tiệm Cafe Đá
+          Cafe - Uống Là Mê
         </Text>
       </View>
       <KeyboardAvoidingView behavior="padding" style={styles.login}>
@@ -132,6 +137,9 @@ export function SignInScreen() {
                 helperText={errors?.password?.message}
                 placeholder="Nhập mật khẩu của bạn"
                 secureTextEntry={true}
+                style={{
+                  marginTop: 30,
+                }}
               />
             )}
             name="password"
@@ -209,12 +217,10 @@ const styles = StyleSheet.create({
   },
   buttonLogin: {
     backgroundColor: '#B3282D',
-    borderRadius: 100,
-    paddingBottom: 10,
-    paddingTop: 10,
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 10,
+    borderRadius: 5,
+    paddingTop: 15,
+    paddingBottom: 15,
+    marginTop: 40,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

@@ -53,6 +53,7 @@ export interface Daum {
 }
 
 export function CartScreen() {
+  // Lấy thông tin người dùng từ state của Redux store
   const { user } = useSelector(
     ({ auth }: RootStore) => ({
       user: auth.user,
@@ -61,6 +62,7 @@ export function CartScreen() {
   )
   const queryClient = new QueryClient()
 
+  // Sử dụng useQuery để lấy dữ liệu giỏ hàng từ API
   const { data, refetch } = useQuery({
     queryFn: async () => {
       const res = await ApiClient.get<Daum>('/cart/my-self')
@@ -71,6 +73,7 @@ export function CartScreen() {
     refetchInterval: 1,
   })
 
+  // Sử dụng useMutation để cập nhật số lượng sản phẩm trong giỏ hàng
   const { mutate } = useMutation({
     mutationFn: async ({ id, quantity }: { id: string; quantity: number }) => {
       const res = await ApiClient.put('/cart/update', {
@@ -87,6 +90,7 @@ export function CartScreen() {
     },
   })
 
+  // Sử dụng useMutation để xóa sản phẩm khỏi giỏ hàng
   const { mutate: deleteProduct } = useMutation({
     mutationFn: async (id: string) => {
       const res = await ApiClient.delete(`/cart/delete/${id}`)
@@ -103,6 +107,7 @@ export function CartScreen() {
     },
   })
 
+  // Component Item để hiển thị từng sản phẩm trong giỏ hàng
   const Item = ({
     item: {
       _id: cartId,
@@ -185,11 +190,13 @@ export function CartScreen() {
     )
   }
 
+  // Hàm để render từng sản phẩm trong giỏ hàng
   const renderItem = ({ item }: { item: Item }) => {
     return <Item item={item} key={item._id} />
   }
   const navigation = useNavigation<NavigationProp>()
 
+  // Hiển thị khi giỏ hàng trống
   if (data?.data.items.length === 0) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -198,6 +205,7 @@ export function CartScreen() {
     )
   }
 
+  // Hiển thị danh sách sản phẩm trong giỏ hàng và thông tin tổng giá tiền
   return data?.data && data.data.total > 0 ? (
     <View style={styles.container}>
       <View
@@ -212,14 +220,13 @@ export function CartScreen() {
       >
         <Text style={{ fontSize: 20, fontWeight: '700', color: 'brown' }}>Giỏ hàng của bạn</Text>
       </View>
-
+      {/* // Hiển thị danh sách sản phẩm trong giỏ hàng bằng FlatList */}
       <FlatList
         data={data?.data.items || []}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
         style={{ paddingTop: 90 }}
       />
-
       <View style={styles.footter}>
         <View>
           <Text>Tạm tính:</Text>
@@ -230,9 +237,14 @@ export function CartScreen() {
         <View style={styles.checkout}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('CheckoutStack', {
-                screen: 'CHECKOUT',
-              })
+              // nếu mà đăng nhập thì sang màn CheckoutStack còn chưa thì ra màn SIGN_IN
+              if (!!user) {
+                navigation.navigate('CheckoutStack', {
+                  screen: 'CHECKOUT',
+                })
+              } else {
+                navigation.navigate('AuthStack', { screen: 'SIGN_IN' })
+              }
             }}
           >
             <View style={{ flexDirection: 'row' }}>

@@ -15,15 +15,19 @@ const state: AuthProps = {
   guestMode: true,
 }
 
+// Reducers là các hàm xử lý actions để cập nhật trạng thái.
 const reducers = {
+  // Thiết lập người dùng đã được xác thực.
   setUser: (state: AuthProps, payload: AuthUser) => ({
     ...state,
     user: payload,
   }),
+  // lần đầu 
   setFirstTime: (state: AuthProps, payload: boolean) => ({
     ...state,
     isFirstTime: payload,
   }),
+  // khách
   setGuestMode: (state: AuthProps, payload: boolean) => ({
     ...state,
     guestMode: payload,

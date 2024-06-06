@@ -1,5 +1,5 @@
 import { z } from 'zod'
-
+// zod là một thư viện TypeScript được sử dụng để kiểm tra và xác thực dữ liệu.
 export const SignUpSchema = z
   .object({
     username: z.string().min(1, { message: 'Tên người dùng phải ít nhất 1 ký tự' }),
