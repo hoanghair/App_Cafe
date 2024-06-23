@@ -15,7 +15,24 @@ export type ProductType = {
 }
 
 export type ProductListType = {
-  data: ProductType[]
+  data: {
+    category: {
+      name: string
+    }
+    products: {
+      _id: string
+      name: string
+      description: string
+      price: number
+      cost: number
+      quantity: number
+      categoryId: string
+      image: string
+      createdAt: string
+      updatedAt: string
+      __v: number
+    }[]
+  }[]
 }
 
 export type ProductDetailType = {
@@ -89,6 +106,17 @@ export const orderProduct = async (data: OrderInputType) => {
     const response = await ApiClient.post<ProductDetailType>('/order', data)
 
     return response.config
+  } catch (error) {
+    throw error
+  }
+}
+
+export const getCateProduct = async (name: string) => {
+  try {
+    const response = await ApiClientUnAuth.get<ProductListType>(`/category/with/products`, {
+      params: { name: name },
+    })
+    return response.data
   } catch (error) {
     throw error
   }

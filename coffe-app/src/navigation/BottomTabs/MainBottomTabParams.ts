@@ -3,4 +3,5 @@ export type MainBottomTabParamList = {
   TAB_PROFILE: undefined
   TAB_CART: undefined
   TAB_FOOD: undefined
+  TAB_HISTORY: undefined
 }

@@ -14,13 +14,13 @@ import { SignUpSchema, SignUpType } from './types'
 
 const SignUpScreen = () => {
   const theme = useAppTheme()
-  const { colors } = useAppTheme()
   const navigation = useNavigation<NavigationProp>()
 
-  // dữ liệu từ form 
+  // dữ liệu từ form
   const {
     control,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<SignUpType>({
     mode: 'onChange',
@@ -34,8 +34,15 @@ const SignUpScreen = () => {
 
   // gửi request đến API và xử lý kết quả.
   const { isLoading, mutate } = useMutation(signUp, {
-    onError: (error) => {
-      Alert.alert('Đăng ký thất bại')
+    onError: (error: any) => {
+      if (error?.response.data.error === 'Email already exists') {
+        setError('email', {
+          type: 'manual',
+          message: 'Email đã tồn tại',
+        })
+      } else {
+        Alert.alert('Đăng ký thất bại')
+      }
     },
     onSuccess: (response) => {
       Alert.alert('Đăng ký thành công')

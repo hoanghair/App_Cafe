@@ -8,9 +8,17 @@ type Props = {
   helperText?: string
   styleInput?: StyleProp<TextStyle>
   label?: string
+  styleOutlineInput?: StyleProp<TextStyle>
 } & TextInputProps
 
-const Input: React.FC<Props> = ({ helperText, style, styleInput, label, ...props }) => {
+const Input: React.FC<Props> = ({
+  helperText,
+  style,
+  styleOutlineInput,
+  styleInput,
+  label,
+  ...props
+}) => {
   const { colors } = useAppTheme()
 
   return (
@@ -20,7 +28,7 @@ const Input: React.FC<Props> = ({ helperText, style, styleInput, label, ...props
       <TextInputPaper
         mode="outlined"
         placeholderTextColor={colors.placeholder}
-        style={styles.input}
+        style={styleOutlineInput}
         {...props}
         render={(innerProps) => (
           <TextInput
@@ -42,7 +50,6 @@ const Input: React.FC<Props> = ({ helperText, style, styleInput, label, ...props
 const styles = StyleSheet.create({
   input: {
     ...textStyles.text14,
-    border: 1,
     padding: 0,
   },
   text: {

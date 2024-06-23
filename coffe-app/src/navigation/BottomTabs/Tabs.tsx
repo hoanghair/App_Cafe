@@ -6,7 +6,7 @@ import ProfileFocusedSvg from '@/assets/svg/profile-focused.svg'
 import ProfileSvg from '@/assets/svg/profile.svg'
 import { useAppTheme } from '@/libs/config/theme'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { BOTTOM_TABS_KEY } from '../preset'
 import { MainBottomTabParamList } from './MainBottomTabParams'
 import { TabCart } from './TabCart'
@@ -52,7 +52,6 @@ const BottomTabs = () => {
           ),
       },
     },
-
     {
       name: BOTTOM_TABS_KEY.TAB_PROFILE,
       component: TabProfile,

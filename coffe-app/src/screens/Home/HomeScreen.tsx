@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
+  KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,11 +11,16 @@ import {
   View,
 } from 'react-native'
 
-import { getProduct } from '@/libs/api/product'
+import SearchIcon from '@/assets/svg/search.svg'
+import { getCateProduct } from '@/libs/api/product'
+import { Input } from '@/libs/components'
+import { useAppTheme } from '@/libs/config/theme'
 import { NavigationProp } from '@/navigation'
 import { Entypo, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
+import { Controller, useForm } from 'react-hook-form'
+import { Button } from 'react-native-paper'
 import Swiper from 'react-native-swiper'
 
 // định dạng chuỗi thành dạng có .
@@ -41,7 +48,7 @@ function Item({
   updatedAt: string
   __v: number
 }) {
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<NavigationProp>()
   return (
     <View>
       <TouchableOpacity
@@ -72,35 +79,92 @@ function Item({
   )
 }
 
-// Component HomeScreen
-export function HomeScreen() {
-  // render sản phẩm
-  const renderItem = ({
-    item,
-  }: {
-    item: {
-      _id: string
-      name: string
-      description: string
-      price: number
-      cost: number
-      quantity: number
-      categoryId: string
-      image: string
-      createdAt: string
-      updatedAt: string
-      __v: number
-    }
-  }) => <Item {...item} />
+const CategoryProd = ({
+  category: { name },
+  products,
+}: {
+  category: {
+    name: string
+  }
+  products: {
+    _id: string
+    name: string
+    description: string
+    price: number
+    cost: number
+    quantity: number
+    categoryId: string
+    image: string
+    createdAt: string
+    updatedAt: string
+    __v: number
+  }[]
+}) => {
+  return (
+    <>
+      <Text
+        style={{ paddingLeft: 10, marginBottom: -20, marginTop: 20, fontSize: 18, fontWeight: 700 }}
+      >
+        {name}
+      </Text>
+      <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+        {products.map((item) => (
+          <Item {...item} key={item._id} />
+        ))}
+      </View>
+    </>
+  )
+}
 
-  // call api 
-  const { data } = useQuery({
-    queryFn: getProduct,
-    queryKey: ['product'],
+export function HomeScreen() {
+  type Search = {
+    key_word: string
+  }
+
+  const {
+    control,
+    getValues,
+    formState: { errors },
+  } = useForm<Search>({
+    mode: 'onChange',
+    defaultValues: {
+      key_word: '',
+    },
   })
 
+  const [search, setSearch] = React.useState<Search>({
+    key_word: '',
+  })
+
+  const { data, refetch, isLoading } = useQuery({
+    queryFn: () => getCateProduct(search.key_word),
+    queryKey: ['product', search.key_word],
+  })
+
+  console.info(data)
+
+  const theme = useAppTheme()
+
+  const onSearch = () => {
+    setSearch({
+      key_word: getValues('key_word'),
+    })
+    refetch()
+  }
+
+  console.log(data)
+
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     setSearch({
+  //       key_word: '',
+  //     })
+  //     refetch()
+  //   }, []),
+  // )
+
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.header}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image
@@ -110,6 +174,7 @@ export function HomeScreen() {
           <Text style={styles.textHeader}>Chào mừng bạn đến với Coffee Shop</Text>
         </View>
       </View>
+
       <ScrollView>
         <View style={styles.banner}>
           <View style={styles.itemBanner}>
@@ -135,6 +200,7 @@ export function HomeScreen() {
             </Swiper>
           </View>
         </View>
+
         <View style={styles.register}>
           <View
             style={{
@@ -170,12 +236,56 @@ export function HomeScreen() {
             </View>
           </View>
         </View>
-        <View>
+        <View
+          style={{
+            alignItems: 'center',
+          }}
+        >
           <Text style={styles.contentListProduct}>Sản Phẩm Nổi Bật</Text>
-          <ScrollView>
-            <View style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-              {data && data.data.map((item, index) => <Item key={index} {...item} />)}
+
+          <View style={styles.inputContainer}>
+            <View style={{ flex: 1 }}>
+              <Controller
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <Input
+                    outlineColor={theme.colors.primary}
+                    styleInput={{
+                      ...styles.input,
+                      fontFamily: theme.fonts.default.fontFamily,
+                      fontSize: 14,
+                      borderWidth: 0,
+                    }}
+                    styleOutlineInput={{
+                      height: 38,
+                    }}
+                    theme={theme}
+                    value={value}
+                    onChangeText={onChange}
+                    error={!!errors?.key_word?.message}
+                    helperText={errors?.key_word?.message}
+                  />
+                )}
+                name="key_word"
+              />
             </View>
+
+            <Button onPress={onSearch} style={styles.searchButton}>
+              <SearchIcon color={theme.colors.text} />
+            </Button>
+          </View>
+          <ScrollView>
+            {isLoading ? (
+              <View style={{ marginTop: 30 }}>
+                <ActivityIndicator size="large" />
+              </View>
+            ) : data && data.data && data.data.length > 0 ? (
+              data.data.map((item, index) => <CategoryProd {...item} key={index} />)
+            ) : (
+              <View style={{ marginTop: 30, alignItems: 'center' }}>
+                <Text>Không có sản phẩm nào</Text>
+              </View>
+            )}
           </ScrollView>
         </View>
         <View style={styles.footer}>
@@ -188,7 +298,7 @@ export function HomeScreen() {
           </Text>
         </View>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -282,6 +392,7 @@ const styles = StyleSheet.create({
 
   contentListProduct: {
     fontWeight: 'bold',
+    textAlign: 'left',
     fontSize: 18,
     paddingTop: 20,
     marginLeft: 10,
@@ -388,5 +499,48 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 8,
+  },
+  inputContainer: {
+    position: 'relative',
+    flex: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '95%',
+    height: 60,
+    paddingHorizontal: 10,
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: '#B3282D',
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3, // Elevation for Android shadow
+  },
+  input: {
+    borderWidth: 0,
+    paddingHorizontal: 8,
+    width: '86%',
+    height: 40,
+    borderRadius: 4,
+    backgroundColor: '#F9F9F9',
+  },
+  inputOutline: {
+    height: 38,
+  },
+  searchButton: {
+    position: 'absolute',
+    right: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 10,
+    // paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: '#B3282D',
+    borderRadius: 4,
+    marginLeft: 20,
   },
 })

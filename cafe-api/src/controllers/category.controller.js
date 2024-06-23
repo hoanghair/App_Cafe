@@ -1,4 +1,5 @@
 const Category = require("../models/category.model");
+const Product = require("../models/product.model");
 
 // tạo danh mục
 function CategoryController() {
@@ -87,6 +88,34 @@ function CategoryController() {
       res
         .status(200)
         .json({ message: "Deleted successfully", data: deletedCategory });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+
+  this.getAllCategoryWithProducts = async (req, res) => {
+    try {
+      const categories = await Category.find();
+      const categoriesWithProducts = [];
+
+      for (let category of categories) {
+        let productsQuery = { categoryId: category._id };
+
+        if (req.query.name) {
+          productsQuery.name = { $regex: new RegExp(req.query.name, "i") };
+        }
+
+        const products = await Product.find(productsQuery);
+
+        if (products.length > 0) {
+          categoriesWithProducts.push({
+            category: category,
+            products: products,
+          });
+        }
+      }
+
+      res.status(200).json({ data: categoriesWithProducts });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

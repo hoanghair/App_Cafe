@@ -6,6 +6,7 @@ import { AuthStack } from './AuthStack'
 import { BottomTabs } from './BottomTabs'
 import { CheckoutStack } from './CheckoutStack'
 import { ProductStack } from './ProductStack'
+import { ProfileStack } from './ProfileStack'
 import { RootStackParamList } from './RootStackParams'
 
 const RootStack = createStackNavigator<RootStackParamList>()
@@ -17,9 +18,7 @@ const Navigation = () => {
       user: auth.user,
     }),
     isEqual,
-  );
-
-  console.log({ user })
+  )
 
   if (!user) {
     return (
@@ -36,6 +35,7 @@ const Navigation = () => {
       <RootStack.Screen name="BottomTabs" component={BottomTabs} />
       <RootStack.Screen name="ProductStack" component={ProductStack} />
       <RootStack.Screen name="CheckoutStack" component={CheckoutStack} />
+      <RootStack.Screen name="ProfileStack" component={ProfileStack} />
     </RootStack.Navigator>
   )
 }

@@ -7,7 +7,7 @@ import { NavigationProp } from '@/navigation'
 import { RootStore } from '@/store'
 import { Entypo } from '@expo/vector-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { QueryClient, useMutation, useQuery } from '@tanstack/react-query'
 import { isEqual, truncate } from 'lodash'
 import React from 'react'
@@ -115,6 +115,12 @@ export function CheckoutScreen() {
 
   const theme = useAppTheme()
 
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch()
+    }, []),
+  )
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -184,8 +190,8 @@ export function CheckoutScreen() {
             >
               <Text style={{ fontSize: 18, fontWeight: '500' }}>Món</Text>
             </View>
-            {data?.data.items.map((item) => (
-              <View style={styles.item}>
+            {data?.data.items.map((item, index) => (
+              <View style={styles.item} key={index}>
                 <Image
                   style={{ width: 60, height: 50 }}
                   source={{

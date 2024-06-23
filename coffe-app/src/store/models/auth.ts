@@ -22,7 +22,7 @@ const reducers = {
     ...state,
     user: payload,
   }),
-  // lần đầu 
+  // lần đầu
   setFirstTime: (state: AuthProps, payload: boolean) => ({
     ...state,
     isFirstTime: payload,

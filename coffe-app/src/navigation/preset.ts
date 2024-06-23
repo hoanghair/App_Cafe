@@ -66,6 +66,7 @@ export const SCREENS_KEY = {
   SETTING: {
     INDEX: 'SETTING_INDEX' as const,
     PROFILE: 'SETTING_PROFILE' as const,
+    HISTORY_ORDER: 'SETTING_HISTORY_ORDER' as const,
   },
   CART: {
     INDEX: 'CART_INDEX' as const,
@@ -87,4 +88,5 @@ export const BOTTOM_TABS_KEY = {
   TAB_PROFILE: 'TAB_PROFILE' as const,
   TAB_FOOD: 'TAB_FOOD' as const,
   TAB_CART: 'TAB_CART' as const,
+  TAB_HISTORY: 'TAB_HISTORY' as const,
 }

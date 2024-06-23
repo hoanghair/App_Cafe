@@ -18,6 +18,7 @@
     "@rematch/core": "^2.2.0",
     "@rematch/loading": "^2.1.2",
     "@rematch/persist": "^2.1.2",
+    "@shopify/flash-list": "^1.6.4",
     "@tanstack/react-query": "^4.26.1",
     "axios": "^1.6.8",
     "expo": "^51.0.8",

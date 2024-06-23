@@ -78,9 +78,7 @@ export function DetailProductScreen() {
           <Text style={{ fontSize: 14 }}>Số lượng: {detailProduct?.quantity}</Text>
         </View>
         <View style={styles.in4}>
-          <Text style={{ fontSize: 13, lineHeight: 19, color: 'grey' }}>
-            {detailProduct?.description}
-          </Text>
+          <Text style={{ fontSize: 13, color: 'grey' }}>{detailProduct?.description}</Text>
         </View>
       </View>
       <View style={{ marginTop: 20, alignItems: 'center', marginBottom: 10 }}>

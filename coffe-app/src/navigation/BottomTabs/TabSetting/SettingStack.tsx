@@ -1,7 +1,8 @@
 import { SCREENS_KEY } from '@/navigation/preset'
+import { HistoryOrderScreen } from '@/screens/History'
 import { ProfileScreen } from '@/screens/Profile'
 import { createStackNavigator } from '@react-navigation/stack'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { SettingStackParams } from './SettingStackParams'
 
 const SettingScreens = [
@@ -11,8 +12,8 @@ const SettingScreens = [
     options: { headerShown: false },
   },
   {
-    name: SCREENS_KEY.SETTING.PROFILE,
-    component: ProfileScreen,
+    name: SCREENS_KEY.SETTING.HISTORY_ORDER,
+    component: HistoryOrderScreen,
     options: { headerShown: false },
   },
 ]
@@ -20,10 +21,6 @@ const SettingScreens = [
 const HomeStack = createStackNavigator<SettingStackParams>()
 
 export function TabProfile() {
-
-  useEffect(() => {
-    console.log('setting')
-  }, [])
   return (
     <HomeStack.Navigator>
       {SettingScreens.map((child) => (

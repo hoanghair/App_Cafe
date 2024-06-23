@@ -1,4 +1,5 @@
 import AvatarDefault from '@/assets/img/user.png'
+import ChevronRight from '@/assets/svg/chevron-right-primary.svg'
 import { Header } from '@/libs/components'
 import { useAppTheme } from '@/libs/config/theme'
 import { textStyles } from '@/libs/styles'
@@ -13,6 +14,11 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Button, Text } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
+
+interface SettingOptions {
+  label: string
+  onPress?: () => void
+}
 
 const ProfileScreen = () => {
   const navigation = useNavigation<NavigationProp>()
@@ -33,6 +39,17 @@ const ProfileScreen = () => {
     dispatch.auth.setUser(null as never)
     navigation.navigate('BottomTabs', { screen: 'TAB_HOME' })
   }
+
+  const options: SettingOptions[] = [
+    {
+      label: 'Lịch sử đơn hàng',
+      onPress: () => {
+        navigation.navigate('ProfileStack', {
+          screen: 'SETTING_HISTORY_ORDER',
+        })
+      },
+    },
+  ]
 
   return (
     <View style={styles.root}>
@@ -65,6 +82,31 @@ const ProfileScreen = () => {
                 </Text>
               </View>
             </TouchableOpacity>
+
+            {options.map((option, index) => (
+              <TouchableOpacity key={index} onPress={option.onPress}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: 16,
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#E5E5E5',
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: '500',
+                    }}
+                  >
+                    {option.label}
+                  </Text>
+                  <ChevronRight width={16} height={16} />
+                </View>
+              </TouchableOpacity>
+            ))}
 
             <Button style={{ marginTop: 20 }} mode="contained" onPress={handleLogout}>
               Đăng xuất

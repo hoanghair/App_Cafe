@@ -15,7 +15,7 @@ import { ApiClient } from '@/libs/config/react-query'
 import { NavigationProp } from '@/navigation'
 import { RootStore } from '@/store'
 import { AntDesign, EvilIcons, Feather } from '@expo/vector-icons'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { QueryClient, useMutation, useQuery } from '@tanstack/react-query'
 import { isEqual } from 'lodash'
 import { useSelector } from 'react-redux'
@@ -106,8 +106,13 @@ export function CartScreen() {
       Alert.alert('Xóa thất bại')
     },
   })
+    // Component Item để hiển thị từng sản phẩm trong giỏ hàng
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch()
+    }, []),
+  )
 
-  // Component Item để hiển thị từng sản phẩm trong giỏ hàng
   const Item = ({
     item: {
       _id: cartId,
@@ -239,9 +244,9 @@ export function CartScreen() {
             onPress={() => {
               // nếu mà đăng nhập thì sang màn CheckoutStack còn chưa thì ra màn SIGN_IN
               if (!!user) {
-                navigation.navigate('CheckoutStack', {
-                  screen: 'CHECKOUT',
-                })
+              navigation.navigate('CheckoutStack', {
+                screen: 'CHECKOUT',
+              })
               } else {
                 navigation.navigate('AuthStack', { screen: 'SIGN_IN' })
               }
